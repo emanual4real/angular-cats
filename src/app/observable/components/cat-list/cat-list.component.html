@@ -1,0 +1,14 @@
+<h1>Cats with Observables</h1>
+<div style="display: flex; flex-direction: row; justify-content: space-around">
+  @for (cat of cats$ | async; track $index) {
+
+  <app-cat [cat]="cat" />
+  }
+</div>
+
+<!-- <div class="card flex justify-content-center">
+  <p-toast />
+  <p-button (onClick)="showPetMessage()" label="Show" />
+</div> -->
+
+<p-toast />

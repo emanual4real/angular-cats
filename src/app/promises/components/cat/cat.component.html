@@ -1,0 +1,45 @@
+<p-card
+  [header]="cat?.name"
+  subheader="Cat Info"
+  [style]="{
+    width: '360px',
+    height: '700px',
+  }"
+>
+  <ng-template pTemplate="header">
+    <img alt="Card" [src]="cat?.imagePath" height="280px" width="360px" />
+  </ng-template>
+  <ng-template pTemplate="content">
+    <div style="height: 200px">
+      <h3>Sex: {{ cat?.sex }}</h3>
+      <h3>Breed: {{ cat?.breed }}</h3>
+      <h3>Color: {{ cat?.color }}</h3>
+      @if(cat?.medicalConditions) {
+      <h3>Medical Conditions: {{ cat?.medicalConditions }}</h3>
+      }
+      <h3>Number of Pets: {{ cat?.numberOfPets }}</h3>
+      <h3>Number of Squirts: {{ cat?.numberOfSquirts }}</h3>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div style="display: flex; flex-direction: row; justify-content: center">
+      <p-button
+        label="Pet"
+        severity="success"
+        class="w-full"
+        [style]="{
+          'margin-right': '5px'
+        }"
+        (onClick)="petCat.emit(cat?.name)"
+      />
+      <p-button
+        label="Squirt"
+        severity="danger"
+        class="w-full"
+        styleClass="w-full"
+        (onClick)="squirtCat(cat?.name)"
+      />
+    </div>
+  </ng-template>
+</p-card>
