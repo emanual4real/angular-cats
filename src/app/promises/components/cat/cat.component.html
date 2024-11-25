@@ -31,14 +31,8 @@
         [style]="{
           'margin-right': '5px'
         }"
+        [disabled]="isCatBeingPetted"
         (onClick)="petCat.emit(cat?.name)"
-      />
-      <p-button
-        label="Squirt"
-        severity="danger"
-        class="w-full"
-        styleClass="w-full"
-        (onClick)="squirtCat(cat?.name)"
       />
     </div>
   </ng-template>

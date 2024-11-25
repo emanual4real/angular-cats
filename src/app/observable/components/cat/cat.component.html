@@ -34,14 +34,6 @@
         [disabled]="(isCatBeingPet$ | async) ?? false"
         (onClick)="petCat(cat?.name)"
       />
-      <p-button
-        label="Squirt"
-        severity="danger"
-        class="w-full"
-        styleClass="w-full"
-        [disabled]="(isCatBeingPet$ | async) ?? false"
-        (onClick)="squirtCat(cat?.name)"
-      />
     </div>
   </ng-template>
 </p-card>

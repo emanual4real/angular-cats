@@ -15,17 +15,15 @@ import { CatObservableService } from '../../services';
   styleUrl: './cat.component.css',
 })
 export class CatObservableComponent {
+  // Child can get updates directly from the parent via @Input() or from the service
+  // The service provides an observable that emits updates to all subscribers.
+  // Child can also request changes from the service without going through the parent
   @Input() cat!: Cat | null;
 
   isCatBeingPet$ = this.catService.isCatBeingPet$;
 
   constructor(private readonly catService: CatObservableService) {}
 
-  squirtCat(catName?: string) {
-    if (catName) {
-      this.catService.squirtCat(catName);
-    }
-  }
   petCat(catName?: string) {
     if (catName) {
       this.catService.petCat(catName);

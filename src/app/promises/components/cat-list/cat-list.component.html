@@ -2,6 +2,12 @@
 <div style="display: flex; flex-direction: row; justify-content: space-around">
   @for (cat of myCats; track $index) {
 
-  <app-cat [cat]="cat" (petCat)="handlePetCat($event)" />
+  <app-cat
+    [cat]="cat"
+    [isCatBeingPetted]="isCatBeingPetted"
+    (petCat)="handlePetCat($event)"
+  />
   }
 </div>
+
+<p-toast />

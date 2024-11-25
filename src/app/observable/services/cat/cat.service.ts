@@ -7,6 +7,7 @@ import { Cat } from '../../../types/cats';
   providedIn: 'root',
 })
 export class CatObservableService {
+  // state is cached and all subscribers get updates
   private readonly catSubject = new BehaviorSubject<Cat[]>([]);
   private readonly catBeingPetSubject = new BehaviorSubject<boolean>(false);
 
@@ -21,6 +22,7 @@ export class CatObservableService {
     });
   }
 
+  // service is responsible for updating the logic for petting cats
   petCat(catName: string) {
     this.http
       .put<Cat>(`http://localhost:4200/cats/pet?catName=${catName}`, null)
@@ -49,12 +51,5 @@ export class CatObservableService {
         this.catSubject.next(data);
         this.catBeingPetSubject.next(false);
       });
-  }
-
-  squirtCat(catName: string) {
-    return this.http.put<Cat>(
-      `http://localhost:4200/cats/squirt?catName=${catName}`,
-      null
-    );
   }
 }
