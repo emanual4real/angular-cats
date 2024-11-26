@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
-import { catObservableResolver } from './cat.resolver';
+import { catNgrxResolver } from './cat.resolver';
 
 describe('catResolver', () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-    TestBed.runInInjectionContext(() =>
-      catObservableResolver(...resolverParameters)
-    );
+    TestBed.runInInjectionContext(() => catNgrxResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

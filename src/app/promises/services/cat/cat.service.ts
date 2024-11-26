@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { lastValueFrom, take } from 'rxjs';
+import { Message } from 'primeng/api';
+import { catchError, lastValueFrom, of, take } from 'rxjs';
 import { Cat } from '../../../types/cats';
 
 @Injectable({
@@ -8,6 +9,29 @@ import { Cat } from '../../../types/cats';
 })
 export class CatPromiseService {
   constructor(private readonly http: HttpClient) {}
+
+  readonly infoPettingMessage: Message = {
+    severity: 'info',
+    summary: 'Info',
+    detail: 'Cats require 2 seconds of petting',
+    life: 1500,
+  };
+
+  readonly successfulPettingMessage: Message = {
+    severity: 'success',
+    summary: 'Success',
+    detail: 'Thank you for petting me human!',
+    life: 1500,
+  };
+
+  getFailurePettingMessage(text: string) {
+    return {
+      severity: 'error',
+      summary: 'Error',
+      detail: text,
+      life: 1500,
+    };
+  }
 
   // No caching, state is not saved anywhere except the component that requests it.
   async getCats() {
@@ -22,8 +46,11 @@ export class CatPromiseService {
   async petCat(catName: string) {
     const request$ = this.http
       .put<Cat>(`http://localhost:4200/cats/pet?catName=${catName}`, null)
-      .pipe(take(1));
+      .pipe(
+        take(1),
+        catchError((err: HttpErrorResponse) => of(err))
+      );
 
-    return await lastValueFrom<Cat>(request$);
+    return await lastValueFrom<Cat | HttpErrorResponse>(request$);
   }
 }

@@ -6,5 +6,4 @@ export interface Cat {
   medicalConditions?: string;
   imagePath?: string;
   numberOfPets: number;
-  numberOfSquirts: number;
 }

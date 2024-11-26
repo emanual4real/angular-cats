@@ -10,7 +10,6 @@ let mockData: Cat[] = [
     color: 'Grey and white with marbling',
     imagePath: './images/marbles.jpg',
     numberOfPets: 0,
-    numberOfSquirts: 0,
   },
   {
     name: 'Torri',
@@ -19,7 +18,6 @@ let mockData: Cat[] = [
     color: 'White with grey splotches',
     imagePath: './images/torri.jpg',
     numberOfPets: 0,
-    numberOfSquirts: 0,
   },
   {
     name: 'Ceecee',
@@ -29,7 +27,6 @@ let mockData: Cat[] = [
     medicalConditions: 'blind',
     imagePath: './images/ceecee.jpg',
     numberOfPets: 0,
-    numberOfSquirts: 0,
   },
   {
     name: 'Pepsi',
@@ -39,7 +36,6 @@ let mockData: Cat[] = [
     medicalConditions: 'Chronic upper respitory',
     imagePath: './images/pepsi.jpg',
     numberOfPets: 0,
-    numberOfSquirts: 0,
   },
 ];
 
@@ -52,6 +48,13 @@ const catPetHandler = http.put('/cats/pet', ({ request }) => {
   const catName = url.searchParams.get('catName');
 
   const existingCat = mockData.find((row) => row.name === catName);
+
+  if (existingCat && existingCat.name === 'Torri') {
+    return new HttpResponse(null, {
+      status: 403,
+      statusText: "You're not the human who is allowed to pet me!",
+    });
+  }
 
   if (existingCat) {
     existingCat.numberOfPets = existingCat.numberOfPets + 1;

@@ -1,0 +1,9 @@
+<h1>Cats with Ngrx</h1>
+<div style="display: flex; flex-direction: row; justify-content: space-around">
+  @for (cat of cats$ | async; track $index) {
+
+  <app-cat [cat]="cat" />
+  }
+</div>
+
+<p-toast />

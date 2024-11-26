@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 import { Cat } from '../../../types';
@@ -32,25 +32,31 @@ export class CatPromiseListComponent implements OnInit {
   // Parent has to handle child events in order to update local cat state
   handlePetCat($event: string) {
     this.isCatBeingPetted = true;
-    this.catService.petCat($event).then((updatedCat) => {
-      const catIndex = this.myCats.findIndex(
-        (row) => row.name === updatedCat.name
-      );
+    this.showPetMessage(this.catService.infoPettingMessage);
 
-      this.myCats[catIndex] = updatedCat;
-      this.showPetMessage();
-      setTimeout(() => {
+    this.catService.petCat($event).then((updatedCat) => {
+      if ('error' in updatedCat) {
+        const failureMessage = this.catService.getFailurePettingMessage(
+          updatedCat.statusText
+        );
+        this.showPetMessage(failureMessage);
         this.isCatBeingPetted = false;
-      }, 2000);
+      } else {
+        const catIndex = this.myCats.findIndex(
+          (row) => row.name === updatedCat.name
+        );
+
+        this.myCats[catIndex] = updatedCat;
+
+        setTimeout(() => {
+          this.isCatBeingPetted = false;
+          this.showPetMessage(this.catService.successfulPettingMessage);
+        }, 2000);
+      }
     });
   }
 
-  showPetMessage() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Cats require 2 seconds of petting',
-      life: 1500,
-    });
+  showPetMessage(message: Message) {
+    this.messageService.add(message);
   }
 }

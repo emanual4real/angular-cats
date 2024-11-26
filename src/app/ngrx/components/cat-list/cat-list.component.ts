@@ -1,28 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Message, MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
 import { Observable, Subscription, tap } from 'rxjs';
 import { Cat } from '../../../types/cats';
-import { CatObservableService } from '../../services/cat/cat.service';
-import { CatObservableComponent } from '../cat/cat.component';
+import { catFeature } from '../../state';
+import { CatNgrxComponent } from '../cat/cat.component';
 
 @Component({
   selector: 'app-cat-list',
   standalone: true,
-  imports: [CatObservableComponent, CommonModule, RippleModule, ToastModule],
+  imports: [CatNgrxComponent, CommonModule, RippleModule, ToastModule],
   providers: [MessageService],
   templateUrl: './cat-list.component.html',
   styleUrl: './cat-list.component.css',
 })
-export class CatObservableListComponent implements OnInit, OnDestroy {
-  cats$: Observable<Cat[]> = this.catService.cats$;
+export class CatNgrxListComponent implements OnInit, OnDestroy {
+  cats$: Observable<Cat[]> = this.store.select(catFeature.selectCats);
   // deferred, meaning it does not run until you subscribe
-  toastMessage$ = this.catService.catToastMessage$.pipe(
-    tap((petMessage) => {
-      if (petMessage) {
-        this.showPetMessage(petMessage);
+  catToastMessage$ = this.store.select(catFeature.selectCatToastMessage).pipe(
+    tap((toastMessage) => {
+      if (toastMessage) {
+        this.showPetMessage(toastMessage);
       }
     })
   );
@@ -30,12 +31,12 @@ export class CatObservableListComponent implements OnInit, OnDestroy {
   catToastMessageSubscription!: Subscription;
 
   constructor(
-    private readonly catService: CatObservableService,
+    private readonly store: Store,
     private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
-    this.catToastMessageSubscription = this.toastMessage$.subscribe();
+    this.catToastMessageSubscription = this.catToastMessage$.subscribe();
   }
 
   showPetMessage(message: Message) {
