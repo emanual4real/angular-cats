@@ -1,13 +1,15 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Message } from 'primeng/api';
-import { catchError, lastValueFrom, of, take } from 'rxjs';
+import { catchError, lastValueFrom, of, take, tap } from 'rxjs';
 import { Cat } from '../../../types/cats';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CatPromiseService {
+  isCatBeingPet = false;
+
   readonly infoPettingMessage: Message = {
     severity: 'info',
     summary: 'Info',
@@ -47,10 +49,21 @@ export class CatPromiseService {
     const request$ = this.http
       .put<Cat>(`http://localhost:4200/cats/pet?catName=${catName}`, null)
       .pipe(
+        tap(() => {
+          this.isCatBeingPet = true;
+        }),
         take(1),
-        catchError((err: HttpErrorResponse) => of(err))
+        catchError((err: HttpErrorResponse) => {
+          this.isCatBeingPet = false;
+          return of(err);
+        })
       );
 
     return await lastValueFrom<Cat | HttpErrorResponse>(request$);
+    // .finally(
+    //   () => {
+    //     this.isCatBeingPet = false;
+    //   }
+    // );
   }
 }

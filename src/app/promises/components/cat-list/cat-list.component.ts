@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Message, MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
@@ -15,9 +15,10 @@ import { CatPromiseComponent } from '../cat/cat.component';
   templateUrl: './cat-list.component.html',
   styleUrl: './cat-list.component.css',
 })
-export class CatPromiseListComponent implements OnInit {
+export class CatPromiseListComponent implements OnInit, OnDestroy {
   myCats: Cat[] = [];
-  isCatBeingPetted = false;
+  isCatBeingPet = false;
+  intervalRef!: ReturnType<typeof setInterval>;
 
   constructor(
     private readonly catService: CatPromiseService,
@@ -27,11 +28,23 @@ export class CatPromiseListComponent implements OnInit {
   // Data only gets updated once.  If the services updates from another component/service, we won't know about it.
   async ngOnInit(): Promise<void> {
     this.myCats = await this.catService.getCats();
+
+    this.intervalRef = setInterval(() => {
+      console.log(
+        'this.catService.isCatBeingPet',
+        this.catService.isCatBeingPet
+      );
+      this.isCatBeingPet = this.catService.isCatBeingPet;
+
+      setTimeout(() => {
+        this.catService.isCatBeingPet = false;
+      }, 2000);
+    }, 1000);
   }
 
   // Parent has to handle child events in order to update local cat state
   handlePetCat($event: string) {
-    this.isCatBeingPetted = true;
+    this.isCatBeingPet = true;
     this.showPetMessage(this.catService.infoPettingMessage);
 
     this.catService.petCat($event).then((updatedCat) => {
@@ -40,7 +53,7 @@ export class CatPromiseListComponent implements OnInit {
           updatedCat.statusText
         );
         this.showPetMessage(failureMessage);
-        this.isCatBeingPetted = false;
+        this.isCatBeingPet = false;
       } else {
         const catIndex = this.myCats.findIndex(
           (row) => row.name === updatedCat.name
@@ -49,7 +62,7 @@ export class CatPromiseListComponent implements OnInit {
         this.myCats[catIndex] = updatedCat;
 
         setTimeout(() => {
-          this.isCatBeingPetted = false;
+          this.isCatBeingPet = false;
           this.showPetMessage(this.catService.successfulPettingMessage);
         }, 2000);
       }
@@ -58,5 +71,9 @@ export class CatPromiseListComponent implements OnInit {
 
   showPetMessage(message: Message) {
     this.messageService.add(message);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.intervalRef);
   }
 }
