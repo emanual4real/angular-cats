@@ -18,6 +18,7 @@ import { CatObservableComponent } from '../cat/cat.component';
 })
 export class CatObservableListComponent implements OnInit, OnDestroy {
   cats$: Observable<Cat[]> = this.catService.cats$;
+  // deferred, meaning it does not run until you subscribe
   isCatBeingPet$ = this.catService.isCatBeingPet$.pipe(
     tap((pet) => {
       if (pet) {
