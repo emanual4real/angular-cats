@@ -8,8 +8,6 @@ import { Cat } from '../../../types/cats';
   providedIn: 'root',
 })
 export class CatPromiseService {
-  constructor(private readonly http: HttpClient) {}
-
   readonly infoPettingMessage: Message = {
     severity: 'info',
     summary: 'Info',
@@ -23,6 +21,8 @@ export class CatPromiseService {
     detail: 'Thank you for petting me human!',
     life: 1500,
   };
+
+  constructor(private readonly http: HttpClient) {}
 
   getFailurePettingMessage(text: string) {
     return {

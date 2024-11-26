@@ -1,23 +1,23 @@
 import { Routes } from '@angular/router';
-import { CatNgrxListComponent } from './ngrx';
+import { HomeNgrxComponent } from './ngrx/components/home';
 import { catNgrxResolver } from './ngrx/resolvers';
-import { CatObservableListComponent } from './observable';
+import { HomeObservableComponent } from './observable';
 import { catObservableResolver } from './observable/resolvers';
-import { CatPromiseListComponent } from './promises/components';
+import { HomePromisesComponent } from './promises/components/home/home.component';
 
 export const routes: Routes = [
   {
     path: 'observables',
-    loadComponent: () => CatObservableListComponent,
+    loadComponent: () => HomeObservableComponent,
     resolve: [catObservableResolver],
   },
   {
     path: 'promises',
-    loadComponent: () => CatPromiseListComponent,
+    loadComponent: () => HomePromisesComponent,
   },
   {
     path: 'ngrx',
-    loadComponent: () => CatNgrxListComponent,
+    loadComponent: () => HomeNgrxComponent,
     resolve: [catNgrxResolver],
   },
 ];
