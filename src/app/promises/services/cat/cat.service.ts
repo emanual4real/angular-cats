@@ -60,10 +60,5 @@ export class CatPromiseService {
       );
 
     return await lastValueFrom<Cat | HttpErrorResponse>(request$);
-    // .finally(
-    //   () => {
-    //     this.isCatBeingPet = false;
-    //   }
-    // );
   }
 }

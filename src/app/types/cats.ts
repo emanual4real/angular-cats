@@ -4,6 +4,6 @@ export interface Cat {
   sex: 'F' | 'M';
   color: string;
   medicalConditions?: string;
-  imagePath?: string;
+  imagePath: string;
   numberOfPets: number;
 }

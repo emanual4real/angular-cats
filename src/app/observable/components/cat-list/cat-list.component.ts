@@ -18,6 +18,7 @@ import { CatObservableComponent } from '../cat/cat.component';
 })
 export class CatObservableListComponent implements OnInit, OnDestroy {
   cats$: Observable<Cat[]> = this.catService.cats$;
+  isCatBeingPet$ = this.catService.isCatBeingPet$;
   // deferred, meaning it does not run until you subscribe
   toastMessage$ = this.catService.catToastMessage$.pipe(
     tap((petMessage) => {
@@ -35,6 +36,9 @@ export class CatObservableListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Don't need to prefetch data in component; concern is separated in the resolver
+
+    // subscribe to toastMessage changes
     this.catToastMessageSubscription = this.toastMessage$.subscribe();
   }
 

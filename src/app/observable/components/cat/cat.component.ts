@@ -19,8 +19,7 @@ export class CatObservableComponent {
   // The service provides an observable that emits updates to all subscribers.
   // Child can also request changes from the service without going through the parent
   @Input() cat!: Cat | null;
-
-  isCatBeingPet$ = this.catService.isCatBeingPet$;
+  @Input() isCatBeingPet = false;
 
   constructor(private readonly catService: CatObservableService) {}
 

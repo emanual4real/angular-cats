@@ -2,7 +2,7 @@
 <div style="display: flex; flex-direction: row; justify-content: space-around">
   @for (cat of cats$ | async; track $index) {
 
-  <app-cat [cat]="cat" />
+  <app-cat [cat]="cat" [isCatBeingPet]="(isCatBeingPet$ | async) ?? false" />
   }
 </div>
 

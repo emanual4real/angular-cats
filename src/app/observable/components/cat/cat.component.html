@@ -30,7 +30,7 @@
         [style]="{
           'margin-right': '5px'
         }"
-        [disabled]="(isCatBeingPet$ | async) ?? false"
+        [disabled]="isCatBeingPet"
         (onClick)="petCat(cat?.name)"
       />
     </div>

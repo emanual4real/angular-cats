@@ -16,7 +16,7 @@ import { CatPromiseComponent } from '../cat/cat.component';
   styleUrl: './cat-list.component.css',
 })
 export class CatPromiseListComponent implements OnInit, OnDestroy {
-  myCats: Cat[] = [];
+  cats: Cat[] = [];
   isCatBeingPet = false;
   intervalRef!: ReturnType<typeof setInterval>;
 
@@ -27,7 +27,7 @@ export class CatPromiseListComponent implements OnInit, OnDestroy {
 
   // Data only gets updated once.  If the services updates from another component/service, we won't know about it.
   async ngOnInit(): Promise<void> {
-    this.myCats = await this.catService.getCats();
+    this.cats = await this.catService.getCats();
 
     this.intervalRef = setInterval(() => {
       console.log(
@@ -36,6 +36,7 @@ export class CatPromiseListComponent implements OnInit, OnDestroy {
       );
       this.isCatBeingPet = this.catService.isCatBeingPet;
 
+      // every 2 seconds we set isCatBeingPet to false even if it is already false
       setTimeout(() => {
         this.catService.isCatBeingPet = false;
       }, 2000);
@@ -44,7 +45,7 @@ export class CatPromiseListComponent implements OnInit, OnDestroy {
 
   // Parent has to handle child events in order to update local cat state
   handlePetCat($event: string) {
-    this.isCatBeingPet = true;
+    this.catService.isCatBeingPet = true;
     this.showPetMessage(this.catService.infoPettingMessage);
 
     this.catService.petCat($event).then((updatedCat) => {
@@ -53,16 +54,15 @@ export class CatPromiseListComponent implements OnInit, OnDestroy {
           updatedCat.statusText
         );
         this.showPetMessage(failureMessage);
-        this.isCatBeingPet = false;
+        this.catService.isCatBeingPet = false;
       } else {
-        const catIndex = this.myCats.findIndex(
+        const catIndex = this.cats.findIndex(
           (row) => row.name === updatedCat.name
         );
 
-        this.myCats[catIndex] = updatedCat;
+        this.cats[catIndex] = updatedCat;
 
         setTimeout(() => {
-          this.isCatBeingPet = false;
           this.showPetMessage(this.catService.successfulPettingMessage);
         }, 2000);
       }

@@ -4,6 +4,7 @@ import { catNgrxResolver } from './ngrx/resolvers';
 import { HomeObservableComponent } from './observable';
 import { catObservableResolver } from './observable/resolvers';
 import { HomePromisesComponent } from './promises/components/home/home.component';
+import { HomeSignalComponent } from './signals/components';
 
 export const routes: Routes = [
   {
@@ -19,5 +20,9 @@ export const routes: Routes = [
     path: 'ngrx',
     loadComponent: () => HomeNgrxComponent,
     resolve: [catNgrxResolver],
+  },
+  {
+    path: 'signals',
+    loadComponent: () => HomeSignalComponent,
   },
 ];

@@ -47,20 +47,18 @@ const catPetHandler = http.put('/cats/pet', ({ request }) => {
   const url = new URL(request.url);
   const catName = url.searchParams.get('catName');
 
-  const existingCat = mockData.find((row) => row.name === catName);
+  const existingCatIndex = mockData.findIndex((row) => row.name === catName);
+  const existingCat = mockData[existingCatIndex];
 
   if (existingCat && existingCat.name === 'Torri') {
     return new HttpResponse(null, {
       status: 403,
       statusText: "You're not the human who is allowed to pet me!",
     });
-  }
-
-  if (existingCat) {
+  } else if (existingCat) {
     existingCat.numberOfPets = existingCat.numberOfPets + 1;
 
-    mockData = mockData.filter((row) => row.name !== catName);
-    mockData.push(existingCat);
+    mockData[existingCatIndex] = existingCat;
 
     return HttpResponse.json(existingCat);
   }
